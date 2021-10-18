@@ -23,10 +23,12 @@ export class HeroService {
     //optional type specifier, <Hero[]> - adds TypeScript capabilities, which reduce errors during compile time.
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
+        tap(_ => this.log('fetched heroes')),
         catchError(this.handleError<Hero[]>('getHeroes', []))
       );
   }
 
+  //returns an error handler function to catchError that it has configured with both the name of the operation that failed and a safe return value.
   private handleError<T>(operation = 'operation', result?: T){
     return (error: any): Observable<T> => {
       // TODO: send the error to remote logging infrastructure
